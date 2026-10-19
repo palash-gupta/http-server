@@ -10,7 +10,7 @@
 #define LIST_TEMPLATE_MIDDLE "\">"
 #define LIST_TEMPLATE_BOTTOM "</a></li>\r"
 
-// TODO: improve these functions using snprintf (and replace the strncpy bs)
+#define MAX_BUF_SIZE 4096
 
 int directory_listing(const char *path, char *dir_buf) {
     struct dirent *de;
@@ -57,27 +57,16 @@ int directory_listing(const char *path, char *dir_buf) {
 }
 
 char *html_response_directory(const char* path) {
-    char dir_list[512];
+    char dir_list[MAX_BUF_SIZE];
     if (directory_listing(path, dir_list) != 0)
-        return "";
+        return NULL;
 
     int len = strlen(dir_list);
     int total_len = len + strlen(TEMPLATE_TOP) + strlen(TEMPLATE_BOTTOM) + 1; // +1 for final null terminator
 
     char *html_response = malloc(sizeof(char) * total_len);
 
-    int i = 0;
-
-    strncpy(html_response+i, TEMPLATE_TOP, strlen(TEMPLATE_TOP));
-    i += strlen(TEMPLATE_TOP);
-
-    strncpy(html_response+i, dir_list, strlen(dir_list));
-    i += len;
-
-    strncpy(html_response+i, TEMPLATE_BOTTOM, strlen(TEMPLATE_BOTTOM));
-    i += strlen(TEMPLATE_BOTTOM);
-
-    html_response[i] = '\0';
+    snprintf(html_response, total_len, "%s%s%s", TEMPLATE_TOP, dir_list, TEMPLATE_BOTTOM);
 
     return html_response;
 }
