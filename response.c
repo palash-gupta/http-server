@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include <sys/stat.h>
-#include <stdlib.h>
 
 #include "directory.c"
 
@@ -13,6 +11,8 @@
 #define C_ISDIR 0 // it is a directory
 #define C_ISREG 1 // it is a file
 #define C_ISSTH 2 // it is something else
+
+#define MAX_CONT_LEN 64
 
 long long get_file_size(const char* path) {
     struct stat st;
@@ -30,7 +30,6 @@ int check_path(const char *path) {
     
     // Get file/directory metadata
     if (stat(path, &path_stat) != 0) {
-        printf("Error: Path '%s' does not exist or cannot be accessed.\n", path);
         return -1;
     }
     // Check type using POSIX macros
@@ -47,7 +46,7 @@ char *directory_response(const char *path) {
     char* content = html_response_directory(path);
     int len = strlen(content);
 
-    char content_length[64];
+    char content_length[MAX_CONT_LEN];
     snprintf(content_length, sizeof content_length, "Content-Length: %d\r\n\r\n", len);
 
     int total_len = strlen(OK_TEMPLATE) + strlen(TEXT_HTML) + strlen(content_length) + len + 1; // +1 for \0
@@ -75,7 +74,7 @@ char *file_response(const char *path) {
 
     fclose(fp);
 
-    char content_length[64];
+    char content_length[MAX_CONT_LEN];
     snprintf(content_length, sizeof content_length, "Content-Length: %d\r\n\r\n", filesize);
 
     long long total_len = strlen(OK_TEMPLATE) + strlen(TEXT_PLAIN) + strlen(content_length) + filesize + 1; 
@@ -117,14 +116,7 @@ char *generate_response(const char *path) {
         return file_response(path);
     }
     else {
-        return unsupported_response();
+        return not_found_error();
     }
 
 }
-
-// int main(void) {
-//     char *a = generate_response(".");
-//     printf("%s", a);
-//     free(a);
-//     return 0;
-// }

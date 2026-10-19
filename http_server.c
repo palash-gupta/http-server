@@ -17,7 +17,7 @@
 
 #define PORT "3490"
 #define BACKLOG 10
-#define MAX_MSG_LEN 1024
+#define MAX_MSG_LEN 4096
 
 void *get_in_addr(struct sockaddr *sa)
 {
