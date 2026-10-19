@@ -9,3 +9,7 @@ trying to clone the python `http.server`
 `./server`
 
 The server will be available on port 3490
+
+
+### References
+1. [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/split/index.html)
