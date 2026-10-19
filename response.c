@@ -4,9 +4,10 @@
 
 #include "directory.c"
 
-#define OK_TEMPLATE "HTTP/1 200 OK\r\nServer: http_server.c by me\r\n"
+#define OK_TEMPLATE "HTTP/1.0 200 OK\r\nServer: http_server.c by me\r\n"
+#define NOT_FOUND_TEMPLATE "HTTP/1.0 404 Not Found\r\n"
 
-#define TEXT_HTML "Content-type: text/html\r\n"
+#define TEXT_HTML "Content-type: text/html; charset=utf-8\r\n"
 #define TEXT_PLAIN "Content-type: text/plain\r\n"
 
 #define C_ISDIR 0 // it is a directory
@@ -94,6 +95,16 @@ char *unsupported_response() {
     strncpy(heap_response, response, sizeof(response));
 
     return heap_response;
+}
+
+char *not_found_error() {
+    char *response = NOT_FOUND_TEMPLATE;
+
+    char *heap_response = malloc(sizeof(char) * sizeof(response));
+    strncpy(heap_response, response, sizeof(response));
+
+    return heap_response;
+
 }
 
 char *generate_response(const char *path) {

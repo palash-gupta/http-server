@@ -12,6 +12,9 @@
 #include <signal.h>
 #include <poll.h>
 
+#include "response.c"
+#include "request.c"
+
 #define PORT "3490"
 #define BACKLOG 10
 #define MAX_MSG_LEN 1024
@@ -112,12 +115,22 @@ void serve_new_client(int sockfd) {
 
     printf("httpserver: received connection from %s\n", addr_string);
 
-    char buf[MAX_MSG_LEN];
-    recv(client_fd, buf, sizeof buf, 0);
+    char request[MAX_MSG_LEN];
+    char *response;
 
-    char payload[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Length: 47\r\n\r\n<html><body><h1>Hello World.</h1></body></html>\r\n";
-    send(client_fd, payload, sizeof payload, 0);
+    recv(client_fd, request, sizeof request, 0);
+
+    char *path = get_path_from_request(request);
+    if (path == NULL)
+        response = not_found_error();
+    else
+        response = generate_response(path);
+
+    send(client_fd, response, strlen(response), 0);
     close(client_fd);
+
+    free(path);
+    free(response);
 
 }
 
