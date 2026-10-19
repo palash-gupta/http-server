@@ -148,7 +148,7 @@ void process_client_event(int listener, struct pollfd **pfds, int *fd_size, int 
     printf("pollchat: Client on socket %d sent: %.*s", sender_fd, numbytes, buf);
 
     // loop through all fds, and send them this message.
-    for (int j = 1; j < *fd_size; j++) {
+    for (int j = 1; j < *fd_count; j++) {
         if (j != i)
             send((*pfds)[j].fd, buf, numbytes, 0);
     }
