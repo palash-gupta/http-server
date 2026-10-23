@@ -117,6 +117,7 @@ void serve_new_client(int sockfd) {
 
     char request[MAX_MSG_LEN];
     char *response;
+    size_t response_size;
 
     recv(client_fd, request, sizeof request, 0);
 
@@ -124,9 +125,14 @@ void serve_new_client(int sockfd) {
     if (path == NULL)
         response = not_found_error();
     else
-        response = generate_response(path);
+        response = generate_response(path, &response_size);
 
-    send(client_fd, response, strlen(response), 0);
+    printf("Response size: %d\n", response_size);
+    int rv;
+    if ((rv = send(client_fd, response, response_size, 0)) < 0) {
+        perror("send");
+    }
+    printf("sent size: %d\n", rv);
     close(client_fd);
 
     free(path);

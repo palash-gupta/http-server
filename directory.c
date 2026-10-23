@@ -18,12 +18,12 @@ int directory_listing(const char *path, char *dir_buf) {
         return -1;
     }
 
-    int i = 0;
+    size_t i = 0;
 
     while ((de = readdir(dr)) != NULL) {
         char* name = de->d_name;
 
-        int total_len = strlen(LIST_TEMPLATE_TOP) + strlen(LIST_TEMPLATE_MIDDLE) + strlen(LIST_TEMPLATE_BOTTOM) + 2*strlen(name) + strlen(path+1) + 1; // +1 for \0 and +1 for "/"
+        size_t total_len = strlen(LIST_TEMPLATE_TOP) + strlen(LIST_TEMPLATE_MIDDLE) + strlen(LIST_TEMPLATE_BOTTOM) + 2*strlen(name) + strlen(path+1) + 1; // +1 for \0 and +1 for "/"
         char* html_list_item = malloc(sizeof(char) * total_len);
 
         snprintf(html_list_item, total_len, "%s%s%s%s%s%s", LIST_TEMPLATE_TOP, path+1, name, LIST_TEMPLATE_MIDDLE, name, LIST_TEMPLATE_BOTTOM);
@@ -44,8 +44,8 @@ char *html_response_directory(const char* path) {
     if (directory_listing(path, dir_list) != 0)
         return NULL;
 
-    int len = strlen(dir_list);
-    int total_len = len + strlen(TEMPLATE_TOP) + strlen(TEMPLATE_BOTTOM) + 1; // +1 for final null terminator
+    size_t len = strlen(dir_list);
+    size_t total_len = len + strlen(TEMPLATE_TOP) + strlen(TEMPLATE_BOTTOM) + 1; // +1 for final null terminator
 
     char *html_response = malloc(sizeof(char) * total_len);
 
