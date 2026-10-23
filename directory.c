@@ -7,7 +7,7 @@
 #define LIST_TEMPLATE_MIDDLE "\">"
 #define LIST_TEMPLATE_BOTTOM "</a></li>\r\n"
 
-#define MAX_BUF_SIZE 4096
+#define MAX_BUF_SIZE 65536
 
 int directory_listing(const char *path, char *dir_buf) {
     struct dirent *de;
