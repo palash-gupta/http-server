@@ -13,3 +13,4 @@ The server will be available on port 3490
 
 ### References
 1. [Beej's Guide to Network Programming](https://beej.us/guide/bgnet/html/split/index.html)
+2. [HTTP: Hypertext Transfer Protocol](https://developer.mozilla.org/en-US/docs/Web/HTTP)
